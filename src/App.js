@@ -8,7 +8,11 @@ class App extends React.Component {
     location: '',
     data: {},
     dates: [],
-    temps: []
+    temps: [],
+    selected: {
+      date: '',
+      temp: null
+    }
   };
 
   fetchData = (evt) => {
@@ -36,7 +40,11 @@ class App extends React.Component {
         self.setState({
           data: body,
           dates: dates,
-          temps: temps
+          temps: temps,
+          selected: {
+            date: '',
+            temp: null
+          }
         });
       });
   };
@@ -48,7 +56,15 @@ class App extends React.Component {
   }
 
   onPlotClick = (data) => {
-    console.log(data);
+    if(data.points){
+      this.setState({
+        selected: {
+          date: data.points[0].x,
+          temp: data.points[0].y
+        }
+      })
+
+    }
   }
 
   render() {
@@ -71,8 +87,9 @@ class App extends React.Component {
         {(this.state.data.list) ? (
           <div className="wrapper">
               <p className="temp-wrapper">
-                <span className="temp">{ currentTemp }</span>
+                <span className="temp">{ this.state.selected.temp ? this.state.selected.temp : currentTemp }</span>
                 <span className="temp-symbol">°F</span>
+                <span className="temp-date">{ this.state.selected.temp ? this.state.selected.date : '' }</span>
               </p>
               <h2>Forecast</h2>
                 <Plot
@@ -91,9 +108,3 @@ class App extends React.Component {
 export default App;
 
 
-
-// dt_txt: time of weather prediction
-// temp: expected temperature
-// temp_min: min, expected
-// temp_max: min, expected
-// weather[0].main: string description of weather at that time
