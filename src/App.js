@@ -11,7 +11,6 @@ class App extends React.Component {
   fetchData = (evt) => {
     evt.preventDefault();
     const location = encodeURIComponent(this.state.location);
-    console.log('location', this.state.location)
     const urlPrefix = "http://api.openweathermap.org/data/2.5/forecast?q=";
     const urlSuffix = "&APPID=7f885a80f78f49f408cc23272581f0d3&units=imperial";
     const url = urlPrefix + location + urlSuffix;
@@ -21,7 +20,7 @@ class App extends React.Component {
     xhr({
       url: url
       }, (err, data) => {
-        console.log('data', data);
+        console.log('data', data.body);
         self.setState({
           data: JSON.parse(data.body)
         });
@@ -35,18 +34,26 @@ class App extends React.Component {
   }
 
   render() {
+    let currentTemp = '';
+    if(this.state.data.list){
+      currentTemp = this.state.data.list[0].main.temp;
+    }
+
     return (
     <div>
-      <h1>Weather App</h1>
+      <h1>Weather Monitor</h1>
         <form onSubmit={ this.fetchData }>
           <label>I want to know the weather for
             <input placeholder={ "City, Country" } type="text"
             value={ this.state.location }
             onChange={ this.changeLocation }
-
             />
           </label>
         </form>
+        <p className="temp-wrapper">
+          <span className="temp">{ currentTemp }</span>
+          <span className="temp-symbol">°F</span>
+        </p>
     </div>
     );
   }
