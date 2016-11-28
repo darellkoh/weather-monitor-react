@@ -25,7 +25,6 @@ class App extends React.Component {
       }, (err, data) => {
         const body = JSON.parse(data.body);
         const list = body.list;
-        console.log('list', list);
         let dates = [];
         let temps = [];
 
@@ -33,8 +32,6 @@ class App extends React.Component {
           dates.push(element.dt_txt);
           temps.push(element.main.temp)
         }
-        console.log('dates arr', dates);
-        console.log('temps arr', temps);
 
         self.setState({
           data: body,
@@ -48,6 +45,10 @@ class App extends React.Component {
     this.setState({
       location: evt.target.value
     });
+  }
+
+  onPlotClick = (data) => {
+    console.log(data);
   }
 
   render() {
@@ -78,6 +79,7 @@ class App extends React.Component {
                 xData={ this.state.dates }
                 yData={ this.state.temps }
                 type="scatter"
+                onPlotClick={ this.onPlotClick }
                 />
           </div>
           ) : null}
