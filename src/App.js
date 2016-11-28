@@ -6,13 +6,6 @@ import {connect} from 'react-redux';
 import {changeLocation, setData, setDates, setTemps, setSelectedTemp, setSelectedDate} from './actions.js';
 
 class App extends React.Component {
-  // state = {
-  //   return {
-  //     data: {},
-  //     dates: [],
-  //     temps: [],
-  //   };
-  // };
 
   fetchData = (evt) => {
     evt.preventDefault();
@@ -31,16 +24,11 @@ class App extends React.Component {
         let dates = [];
         let temps = [];
 
-        for(var element of list){
+        for(let element of list){
           dates.push(element.dt_txt);
           temps.push(element.main.temp)
         }
 
-        // self.setState({
-        //   data: data,
-        //   dates: dates,
-        //   temps: temps,
-        // });
         self.props.dispatch(setData(body));
         self.props.dispatch(setDates(dates));
         self.props.dispatch(setTemps(temps));
@@ -56,7 +44,7 @@ class App extends React.Component {
 
   onPlotClick = (data) => {
     if(data.points){
-      var number = data.points[0].pointNumber;
+      const number = data.points[0].pointNumber;
       this.props.dispatch(setSelectedDate(this.props.dates[number]));
       this.props.dispatch(setSelectedTemp(this.props.temps[number]));
     }
@@ -74,34 +62,34 @@ class App extends React.Component {
         <form onSubmit={this.fetchData}>
           <label>I want to know the weather for
             <input placeholder={"City, Country"}
-            type="text"
-            value={this.props.location}
-            onChange={this.changeLocation}
+              type="text"
+              value={this.props.location}
+              onChange={this.changeLocation}
             />
           </label>
         </form>
         {(this.props.data.list) ? (
           <div className='wrapper'>
-          {(this.props.selected.temp) ? (
-            <p className='temp-wrapper'>The temperature on {this.props.selected.date} will be {this.props.selected.temp}°F</p>
-            ) : (
-            <p className='temp-wrapper'>The current temperature is {currentTemp}°F!</p>
-            )}
+            {(this.props.selected.temp) ? (
+                <p className='temp-wrapper'>The temperature on {this.props.selected.date} will be {this.props.selected.temp}°F </p>
+              ) : (
+                <p className='temp-wrapper'>The current temperature is {currentTemp}°F! </p>
+              )}
               <h2>Forecast</h2>
                 <Plot
                 xData={ this.props.dates }
                 yData={ this.props.temps }
-                type="scatter"
                 onPlotClick={ this.onPlotClick }
+                type="scatter"
                 />
           </div>
-          ) : null}
-      </div>
+        ) : null}
+    </div>
     );
   }
 }
 
-function mapStateToProps(state){
+const mapStateToProps = (state) => {
   return state;
 }
 

@@ -1,4 +1,4 @@
-var initialState = {
+let initialState = {
     location: '',
     data: {},
     dates: [],
@@ -43,7 +43,6 @@ export default function mainReducer(state = initialState, action) {
                     temp: state.selected.temp
                 }
             });
-
         default:
             return state;
     }
