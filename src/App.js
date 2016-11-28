@@ -1,11 +1,14 @@
 import React from 'react';
 import './App.css';
 import xhr from 'xhr';
+import Plot from './plot.js';
 
 class App extends React.Component {
   state = {
     location: '',
-    data: {}
+    data: {},
+    dates: [],
+    temps: []
   };
 
   fetchData = (evt) => {
@@ -20,9 +23,23 @@ class App extends React.Component {
     xhr({
       url: url
       }, (err, data) => {
-        console.log('data', data.body);
+        const body = JSON.parse(data.body);
+        const list = body.list;
+        console.log('list', list);
+        let dates = [];
+        let temps = [];
+
+        for(var element of list){
+          dates.push(element.dt_txt);
+          temps.push(element.main.temp)
+        }
+        console.log('dates arr', dates);
+        console.log('temps arr', temps);
+
         self.setState({
-          data: JSON.parse(data.body)
+          data: body,
+          dates: dates,
+          temps: temps
         });
       });
   };
@@ -34,7 +51,7 @@ class App extends React.Component {
   }
 
   render() {
-    let currentTemp = '';
+    let currentTemp;
     if(this.state.data.list){
       currentTemp = this.state.data.list[0].main.temp;
     }
@@ -50,11 +67,21 @@ class App extends React.Component {
             />
           </label>
         </form>
-        <p className="temp-wrapper">
-          <span className="temp">{ currentTemp }</span>
-          <span className="temp-symbol">°F</span>
-        </p>
-    </div>
+        {(this.state.data.list) ? (
+          <div className="wrapper">
+              <p className="temp-wrapper">
+                <span className="temp">{ currentTemp }</span>
+                <span className="temp-symbol">°F</span>
+              </p>
+              <h2>Forecast</h2>
+                <Plot
+                xData={ this.state.dates }
+                yData={ this.state.temps }
+                type="scatter"
+                />
+          </div>
+          ) : null}
+      </div>
     );
   }
 }
