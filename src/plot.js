@@ -35,7 +35,9 @@ class Plot extends React.Component {
     }
 
     render() {
-        return ( < div id = "plot" > < /div>)
+        return (
+        <div id="plot"></div>
+      )
     }
 }
 

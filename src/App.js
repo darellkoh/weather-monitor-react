@@ -1,9 +1,17 @@
 import React from 'react';
 import './App.css';
-import xhr from 'xhr';
 import Plot from './plot.js';
 import {connect} from 'react-redux';
-import {changeLocation, setData, setDates, setTemps, setSelectedTemp, setSelectedDate} from './actions.js';
+import xhr from 'xhr';
+import {
+  changeLocation,
+  setData,
+  setDates,
+  setTemps,
+  setSelectedTemp,
+  setSelectedDate
+} from './actions.js';
+
 
 class App extends React.Component {
 
@@ -13,28 +21,27 @@ class App extends React.Component {
     const urlPrefix = "http://api.openweathermap.org/data/2.5/forecast?q=";
     const urlSuffix = "&APPID=7f885a80f78f49f408cc23272581f0d3&units=imperial";
     const url = urlPrefix + location + urlSuffix;
-
     const self = this;
 
     xhr({
       url: url
-      }, (err, data) => {
-        const body = JSON.parse(data.body);
-        const list = body.list;
-        let dates = [];
-        let temps = [];
+    }, (err, data) => {
 
-        for(let element of list){
-          dates.push(element.dt_txt);
-          temps.push(element.main.temp)
-        }
+      const body  = JSON.parse(data.body);
+      const list = body.list;
+      const dates = [];
+      const temps = [];
+      for (let element of list) {
+        dates.push(element.dt_txt);
+        temps.push(element.main.temp);
+      }
 
-        self.props.dispatch(setData(body));
-        self.props.dispatch(setDates(dates));
-        self.props.dispatch(setTemps(temps));
-        self.props.dispatch(setSelectedTemp(null));
-        self.props.dispatch(setSelectedDate(''));
-      });
+      self.props.dispatch(setData(body));
+      self.props.dispatch(setDates(dates));
+      self.props.dispatch(setTemps(temps));
+      self.props.dispatch(setSelectedDate(''));
+      self.props.dispatch(setSelectedTemp(null));
+    });
   };
 
 
@@ -71,9 +78,10 @@ class App extends React.Component {
         {(this.props.data.list) ? (
           <div className='wrapper'>
             {(this.props.selected.temp) ? (
-                <p className='temp-wrapper'>The temperature on {this.props.selected.date} will be {this.props.selected.temp}°F </p>
+                <p className='temp-wrapper temp'>The temperature on {this.props.selected.date} will be {this.props.selected.temp}°F.
+                </p>
               ) : (
-                <p className='temp-wrapper'>The current temperature is {currentTemp}°F! </p>
+                <p className='temp-wrapper temp'>The current temperature is {currentTemp}°F!</p>
               )}
               <h2>Forecast</h2>
                 <Plot
