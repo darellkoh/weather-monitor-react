@@ -12,7 +12,6 @@ import {
   setSelectedDate
 } from './actions.js';
 
-
 export class App extends React.Component {
 
   fetchData = (evt) => {
@@ -67,9 +66,9 @@ export class App extends React.Component {
     <div>
       <h1>Weather Monitor</h1>
         <form onSubmit={this.fetchData}>
-          <label>I want to know the weather for
-            <input placeholder={"City, Country"}
-              type="text"
+          <label className='label-text'>I want to know the weather for
+            <input className='input-text' placeholder={'City, Country'}
+              type='text'
               value={this.props.location}
               onChange={this.changeLocation}
             />
@@ -88,7 +87,7 @@ export class App extends React.Component {
                 xData={ this.props.dates }
                 yData={ this.props.temps }
                 onPlotClick={ this.onPlotClick }
-                type="scatter"
+                type='scatter'
                 />
           </div>
         ) : null}
