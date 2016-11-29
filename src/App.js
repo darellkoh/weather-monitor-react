@@ -13,7 +13,7 @@ import {
 } from './actions.js';
 
 
-class App extends React.Component {
+export class App extends React.Component {
 
   fetchData = (evt) => {
     evt.preventDefault();
